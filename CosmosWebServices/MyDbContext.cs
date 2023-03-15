@@ -3,7 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace CosmosWebServices.Models
 {
-    public class MyDbContext: DbContext
+    public class MyDbContext : DbContext
     {
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
@@ -16,6 +16,8 @@ namespace CosmosWebServices.Models
         public DbSet<AsBuiltDrawing> AsBuiltDrawings { get; set; }
         public DbSet<LegalPlanDrawing> LegalPlanDrawings { get; set; }
         public DbSet<PostingPlan> PostingPlans { get; set; }
+        public DbSet<CctvData> CctvDatas { get; set; }
+        public DbSet<CosmosLog> CosmosLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,9 @@ namespace CosmosWebServices.Models
             modelBuilder.Entity<AsBuiltDrawing>().HasNoKey();
             modelBuilder.Entity<LegalPlanDrawing>().HasNoKey();
             modelBuilder.Entity<PostingPlan>().HasNoKey();
+            modelBuilder.Entity<CctvData>().HasNoKey();
+
+            modelBuilder.Entity<CosmosLog>().HasKey(cosmosLog => cosmosLog.LogId);
         }
     }
 }
