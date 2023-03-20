@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Oracle.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-//test code start
 var connectionString = builder.Configuration.GetConnectionString("Development");
 builder.Services.AddDbContext<MyDbContext>(options => options.UseOracle(connectionString));
-//test code end
+builder.Services.AddMemoryCache();
 
 // Add services to the container.
 builder.Services.AddControllers();

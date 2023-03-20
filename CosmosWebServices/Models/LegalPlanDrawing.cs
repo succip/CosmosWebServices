@@ -16,6 +16,7 @@ namespace CosmosWebServices.Models
         public int Year { get; set; }
         [Column("STATUS")]
         public string? Status { get; set; }
+        [NotMapped]
         private string? _hotlinkPath = "";
         [Column("FILEPATHNAME")]
         public string? HotlinkPath

@@ -18,6 +18,7 @@ namespace CosmosWebServices.Models
         public DbSet<PostingPlan> PostingPlans { get; set; }
         public DbSet<CctvData> CctvDatas { get; set; }
         public DbSet<CosmosLog> CosmosLogs { get; set; }
+        public DbSet<CosmosImage> CosmosImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +30,7 @@ namespace CosmosWebServices.Models
             modelBuilder.Entity<LegalPlanDrawing>().HasNoKey();
             modelBuilder.Entity<PostingPlan>().HasNoKey();
             modelBuilder.Entity<CctvData>().HasNoKey();
+            modelBuilder.Entity<CosmosImage>().HasNoKey();
 
             modelBuilder.Entity<CosmosLog>().HasKey(cosmosLog => cosmosLog.LogId);
         }
