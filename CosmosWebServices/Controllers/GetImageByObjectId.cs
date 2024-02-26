@@ -7,30 +7,25 @@ namespace CosmosWebServices.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GetCosmosImage : Controller
+    public class GetImageByObjectId : Controller
     {
-        [HttpGet]
-        public async Task<IActionResult> Get([FromServices] IMemoryCache cache, [FromServices] MyDbContext context)
+        [HttpGet("{objectId}")]
+        public async Task<IActionResult> Get(string objectId, [FromServices] IMemoryCache cache, [FromServices] MyDbContext context)
         {
-            string cacheKey = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
+            string sqlString = $"SELECT s.FACILITYID, a.DATA, a.ATTACHMENTID FROM SPATIAL.TRNBIKERACKS s, SPATIAL.TRNBIKERACKS__ATTACH a WHERE s.OBJECTID = a.REL_OBJECTID AND s.OBJECTID={objectId}";
 
             CosmosImage? cosmosImage = await context.CosmosImages
-                .FromSqlRaw("SELECT SA.DATA, S.FACILITYID, SA.ATTACHMENTID " +
-                "FROM SPATIAL.SIGNLOCATION S, SPATIAL.SIGNLOCATION__ATTACH sa " +
-                "WHERE S.GLOBALID = SA.REL_GLOBALID AND s.FACILITYID = '1002086659'")
+                .FromSqlRaw(sqlString)
                 .FirstOrDefaultAsync();
 
-            if (cosmosImage == null)
-            {
-                return NotFound();
-            }
+            if (cosmosImage == null) return NotFound();
 
+            string cacheKey = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
             byte[] imageData;
 
             if (!cache.TryGetValue(cacheKey, out imageData))
             {
                 imageData = cosmosImage.Data;
-
                 if (imageData != null)
                 {
                     cache.Set(cacheKey, imageData, TimeSpan.FromMinutes(10));
